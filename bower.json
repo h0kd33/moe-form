@@ -1,0 +1,17 @@
+{
+  "name": "moe-form",
+  "version": "0.0.0",
+  "homepage": "https://github.com/moetw/moe-form",
+  "authors": [
+    "touhonoob <touhonoob@gmail.com>"
+  ],
+  "license": "GPL",
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#~1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#~1.0.1",
+    "polymer": "~1.0.2"
+  },
+  "devDepedencies": {
+    "web-component-tester": "~3.1.3"
+  }
+}
