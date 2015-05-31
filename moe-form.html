@@ -85,28 +85,25 @@ Example:
       console.log("textChanged", text);
     },
 
+    clickSubmit: function(event) {
+      //iron-form doesn't support native validation for "form.submit()"
+      document.querySelector("input[type=submit]").click();
+    },
+
+    onSubmit: function(event) {
+        event.preventDefault();
+        var output = document.getElementById('output');
+        output.innerHTML = JSON.stringify(form.serialize());
+    },
+
     // Element Lifecycle
     ready: function() {
 
     },
 
     attached: function() {
-      var form = this.$.form;
-      var submitButton = this.$.submit;
-
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        console.log(event);
-        var output = document.getElementById('output');
-        output.innerHTML = JSON.stringify(form.serialize());
-
-        console.log(text, name);
-      });
-
-      submitButton.addEventListener("click", function(event) {
-        document.querySelector("input[type=submit]").click();
-      });
+      this.$.form.addEventListener('submit', this.onSubmit);
+      this.$.submit.addEventListener("click", this.clickSubmit);
     },
 
     detached: function() {
