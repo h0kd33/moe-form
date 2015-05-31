@@ -13,31 +13,16 @@
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <moe-form></moe-form>
+    <moe-form name="Peter" text="Hello123"></moe-form>
 
     <script>
       var myEl = document.querySelector('moe-form');
 
       suite('<moe-form>', function() {
 
-        test('defines the "author" property', function() {
-          assert.equal(myEl.author.name, 'Dimitri Glazkov');
-          assert.equal(myEl.author.image, 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg');
-        });
-
-        test('says hello', function() {
-          assert.equal(myEl.sayHello(), 'moe-form says, Hello World!');
-
-          var greetings = myEl.sayHello('greetings Earthlings');
-          assert.equal(greetings, 'moe-form says, greetings Earthlings');
-        });
-
-        test('fires lasers', function(done) {
-          myEl.addEventListener('moe-form-lasers', function(event) {
-            assert.equal(event.detail.sound, 'Pew pew!');
-            done();
-          });
-          myEl.fireLasers();
+        test('set name & text', function() {
+          assert.equal(myEl.name, 'Peter');
+          assert.equal(myEl.text, 'Hello123');
         });
 
       });

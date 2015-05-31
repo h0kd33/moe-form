@@ -1,13 +1,11 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-form/iron-form.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -26,85 +24,89 @@ Example:
       box-sizing: border-box;
     }
 
-    .author img {
-      float: left;
-      margin-right: 5px;
-      max-height: 100px;
-      max-width: 100px;
+    #submit {
+      background: var(--paper-green-500);
+      color: white;
+    }
+
+    input[type=submit] {
+      display: none;
     }
   </style>
 
   <template>
-    <h1>&lt;moe-form&gt;</h1>
-    <content></content>
-    <p class="author">
-      <img src="{{author.image}}">
-      Cheers,<br/>
-      <span class="name">{{author.name}}</span>
-    </p>
+    <form is="iron-form" id="form" method="post" action="/">
+      <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}"></paper-input>
+      <paper-textarea label="內文" id="text" name="text" required char-counter maxlength="1000" value="{{text}}"></paper-textarea>
+      <input type="file" name="file" />
+      <paper-button id="submit" icon="create" raised>
+        <iron-icon icon="create"></iron-icon>
+        送出
+      </paper-button>
+      <input type="submit" />
+    </form>
+
+    <div class="layout vertical center-center">
+      <div>
+        <h4>Submitted form data</h4>
+        <div class="horizontal-section wide">
+          <div id="output"></div>
+        </div>
+      </div>
+    </div>
   </template>
 
 </dom-module>
 
 <script>
 
+  function clickHandler(event) {
+    Polymer.dom(event).localTarget.parentElement.submit();
+  }
+
   Polymer({
 
     is: 'moe-form',
 
     properties: {
-
-      /**
-       * `fancy` indicates that the element should don a monocle and tophat,
-       * while checking its pocket watch.
-       */
-      fancy: Boolean,
-
-      /**
-       * Describes the author of the element, but is really just an excuse to
-       * show off JSDoc annotations.
-       *
-       * @type {{name: string, image: string}}
-       */
-      author: {
-        type: Object,
-        // Use `value` to provides a default value for a property, by setting it
-        // on your element's prototype.
-        //
-        // If you provide a function, as we do here, Polymer will call that
-        // _per element instance_.
-        //
-        // We do that to ensure that each element gets its own copy of the
-        // value, rather than having it shared across all instances (via the
-        // prototype).
-        value: function() {
-          return {
-            name:  'Dimitri Glazkov',
-            image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
-          };
-        }
+      name: {
+        type: String
       },
+      text: {
+        type: String
+      }
+    },
 
+    observers: [
+      'textChanged(text)'
+    ],
+
+    textChanged: function(text) {
+      console.log("textChanged", text);
     },
 
     // Element Lifecycle
-
     ready: function() {
-      // `ready` is called after all elements have been configured, but
-      // propagates bottom-up. This element's children are ready, but parents
-      // are not.
-      //
-      // This is the point where you should make modifications to the DOM (when
-      // necessary), or kick off any processes the element wants to perform.
+
     },
 
     attached: function() {
-      // `attached` fires once the element and its parents have been inserted
-      // into a document.
-      //
-      // This is a good place to perform any work related to your element's
-      // visual state or active behavior (measuring sizes, beginning animations,
-      // loading resources, etc).
+      var form = this.$.form;
+      var submitButton = this.$.submit;
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        console.log(event);
+        var output = document.getElementById('output');
+        output.innerHTML = JSON.stringify(form.serialize());
+
+        console.log(text, name);
+      });
+
+      submitButton.addEventListener("click", function(event) {
+        document.querySelector("input[type=submit]").click();
+      });
     },
 
     detached: function() {
@@ -112,36 +114,6 @@ Example:
       // removed from a document.
       //
       // Use this to clean up anything you did in `attached`.
-    },
-
-    // Element Behavior
-
-    /**
-     * The `moe-form-lasers` event is fired whenever `fireLasers` is called.
-     *
-     * @event moe-form-lasers
-     * @detail {{sound: String}}
-     */
-
-    /**
-     * Sometimes it's just nice to say hi.
-     *
-     * @param {string} greeting A positive greeting.
-     * @return {string} The full greeting.
-     */
-    sayHello: function(greeting) {
-      var response = greeting || 'Hello World!';
-      return 'moe-form says, ' + response;
-    },
-
-    /**
-     * Attempts to destroy this element's enemies with an any beam of light!
-     *
-     * Or, at least, dispatches an event in the vain hope that someone else will
-     * do the zapping.
-     */
-    fireLasers: function() {
-      this.fire('moe-form-lasers', {sound: 'Pew pew!'});
     }
 
   });

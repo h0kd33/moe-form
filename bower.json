@@ -7,9 +7,9 @@
   ],
   "license": "GPL",
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#~1.0.0",
-    "paper-elements": "PolymerElements/paper-elements#~1.0.1",
-    "polymer": "~1.0.2"
+    "iron-elements": "PolymerElements/iron-elements#1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#1.0.0",
+    "polymer": "1.0.0"
   },
   "devDependencies": {
     "test-fixture": "PolymerElements/test-fixture#~1.0.0",
