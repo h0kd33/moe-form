@@ -1,0 +1,32 @@
+{
+  "name": "moe-form",
+  "version": "0.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moetw/moe-form.git"
+  },
+  "author": "",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/moetw/moe-form/issues"
+  },
+  "homepage": "https://github.com/moetw/moe-form",
+  "devDependencies": {
+    "browser-sync": "^2.7.6",
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.11.0",
+    "gulp-load-plugins": "^0.10.0",
+    "jshint-stylish": "^2.0.0",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.1.0",
+    "web-component-tester": "^3.1.3"
+  }
+}
