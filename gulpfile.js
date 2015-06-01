@@ -30,7 +30,7 @@ gulp.task('serve', [], function () {
     server: {
       baseDir: ['demo'],
       routes: {
-        '/': './'
+        'bower_components': '../../bower_components/'
       }
     }
   });
