@@ -28,22 +28,17 @@ Example:
       background: var(--paper-green-500);
       color: white;
     }
-
-    input[type=submit] {
-      display: none;
-    }
   </style>
 
   <template>
     <form is="iron-form" id="form" method="post" action="/">
-      <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}"></paper-input>
+      <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
       <paper-textarea label="內文" id="text" name="text" required char-counter maxlength="1000" value="{{text}}"></paper-textarea>
-      <input type="file" name="file" />
+      <input type="file" name="file" required />
       <paper-button id="submit" icon="create" raised>
         <iron-icon icon="create"></iron-icon>
         送出
       </paper-button>
-      <input type="submit" />
     </form>
 
     <div class="layout vertical center-center">
@@ -85,25 +80,22 @@ Example:
       console.log("textChanged", text);
     },
 
-    clickSubmit: function(event) {
-      //iron-form doesn't support native validation for "form.submit()"
-      document.querySelector("input[type=submit]").click();
-    },
-
-    onSubmit: function(event) {
-        event.preventDefault();
-        var output = document.getElementById('output');
-        output.innerHTML = JSON.stringify(form.serialize());
-    },
-
     // Element Lifecycle
     ready: function() {
 
     },
 
     attached: function() {
-      this.$.form.addEventListener('submit', this.onSubmit);
-      this.$.submit.addEventListener("click", this.clickSubmit);
+      var that = this;
+
+      this.$.form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        that.$.output.innerHTML = JSON.stringify(that.$.form.serialize());
+      });
+
+      this.$.submit.addEventListener("click", function() {
+        that.$.form.submit();
+      });
     },
 
     detached: function() {
