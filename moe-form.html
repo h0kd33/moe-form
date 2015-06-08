@@ -28,27 +28,69 @@ Example:
       background: var(--paper-green-500);
       color: white;
     }
+
+    #upload {
+      background: var(--paper-yellow-600);
+      z-index: 10;
+    }
+
+    #cancel {
+      background: var(--paper-grey-300);
+    }
+
+    input[name=file] {
+      visibility: hidden;
+      width: 1px;
+      height: 1px;
+    }
+
+    .file-error {
+      color: var(--paper-red-500);
+    }
   </style>
 
   <template>
-    <form is="iron-form" id="form" method="post" action="/">
+    <form is="iron-form" id="form" method="post" action="/" class="layout vertical">
       <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
       <paper-textarea label="內文" id="text" name="text" required char-counter maxlength="1000" value="{{text}}"></paper-textarea>
-      <input type="file" name="file" required />
-      <paper-button id="submit" icon="create" raised>
-        <iron-icon icon="create"></iron-icon>
-        送出
-      </paper-button>
-    </form>
+      
+      <div class="layout vertical">
+        <div class="layout horizontal">
+          <paper-button id="upload" raised>
+            <iron-icon icon="file-upload"></iron-icon>附圖
+            <input type="file" name="file" required accept="image/*" />
+          </paper-button>
+          <template is="dom-if" if="{{file}}">
+            <span>{{file.name}}</span>
+            (<span>{{file.size}}</span><span>Bytes</span>)
+          </template>
+          <template is="dom-if" if="{{fileError}}">
+            <span class="file-error">{{fileError}}</span>
+          </template>
+        </div>
 
-    <div class="layout vertical center-center">
-      <div>
-        <h4>Submitted form data</h4>
-        <div class="horizontal-section wide">
-          <div id="output"></div>
+        <div class="layout horizontal">
+          <paper-button id="submit" raised>
+            <iron-icon icon="send"></iron-icon>送出
+          </paper-button>
+          <paper-button id="cancel" raised>
+            <iron-icon icon="cancel"></iron-icon>取消
+          </paper-button>
         </div>
       </div>
-    </div>
+    </form>
+
+    <template is="dom-if" if="{{debug}}">
+      <div class="layout vertical center-center">
+        <div>
+          <h4>Debug Output</h4>
+          <div class="horizontal-section wide">
+            <div>{{debugOutput}}</div>
+          </div>
+        </div>
+      </div>
+    </template>
+
   </template>
 
 </dom-module>
@@ -65,10 +107,30 @@ Example:
 
     properties: {
       name: {
-        type: String
+        type: String,
+        notify: true
       },
       text: {
-        type: String
+        type: String,
+        notify: true
+      },
+      file: {
+        type: Object,
+        value: null,
+        notify: true
+      },
+      fileError: {
+        type: String,
+        value: null,
+        notify: true
+      },
+      debug: {
+        type: Boolean,
+        value: false
+      },
+      debugOutput: {
+        type: String,
+        notify: true
       }
     },
 
@@ -90,11 +152,37 @@ Example:
 
       this.$.form.addEventListener('submit', function(event) {
         event.preventDefault();
-        that.$.output.innerHTML = JSON.stringify(that.$.form.serialize());
+        that.debugOutput = JSON.stringify(that.$.form.serialize());
       });
 
       this.$.submit.addEventListener("click", function() {
-        that.$.form.submit();
+        that.submit();
+      });
+
+      this.$.cancel.addEventListener("click", function() {
+        that.cancel();
+      });
+
+      // Setup Input File
+
+      var $inputFile = this.getInputFileElement();
+
+      $inputFile.onchange = function() {
+        if(this.files.length === 1) {
+          that.file = this.files[0];
+        } else {
+          that.file = null;
+        }
+      };
+
+      console.log(this.$.upload.getBoundingClientRect());
+
+      $inputFile.style.left = this.$.upload.getBoundingClientRect().left + "px";
+      $inputFile.style.top = this.$.upload.getBoundingClientRect().top + "px";
+
+      this.$.upload.addEventListener("click", function() {
+        $inputFile.click();
+        that.fileError = null;
       });
     },
 
@@ -103,8 +191,40 @@ Example:
       // removed from a document.
       //
       // Use this to clean up anything you did in `attached`.
-    }
+    },
 
+    getInputFileElement: function() {
+      return document.querySelector("input[type=file]");
+    },
+
+    submit: function() {
+      // Trigger Native Validation
+      if(this.$.form.submit()) {
+        return true;
+      } else {
+        this.validateFile();
+      }
+    },
+
+    cancel: function() {
+      this.fire("cancel");
+    },
+
+    reset: function() {
+      this.name = this.text = "";
+      this.file = this.fileError = null;
+      this.$.form.reset();
+    },
+
+    validateFile: function() {
+      var $inputFile = this.getInputFileElement();
+      if($inputFile.required && $inputFile.files.length === 0) {
+        this.fileError = "File required";
+        return false;
+      }
+
+      return true;
+    }
   });
 
 </script>

@@ -6,6 +6,7 @@ var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var livereload = require('gulp-livereload');
 
 // Lint JavaScript
 gulp.task('jshint', function () {
@@ -28,15 +29,19 @@ gulp.task('serve', [], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: ['demo'],
+      baseDir: ['./'],
       routes: {
-        'bower_components': '../../bower_components/'
+        'bower_components': '../bower_components/'
       }
     }
   });
 
-  gulp.watch(['demo/*.html'], reload);
   gulp.watch(['*.html'], reload);
+});
+
+gulp.task('watch', function() {
+  livereload.listen();
+  gulp.watch(['*.html']).on('change', livereload.changed);
 });
 
 // Load tasks for web-component-tester
