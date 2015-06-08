@@ -6,10 +6,17 @@
     <title>moe-form Demo</title>
     <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="moe-form.html">
+    <style>
+      .container {
+        width: 500px;
+      }
+    </style>
   </head>
   <body>
     <h1>&lt;moe-form&gt;</h1>
-    <moe-form debug="true"></moe-form>
+    <div class="container">
+      <moe-form debug="true"></moe-form>
+    </div>
 
     <script>
       var form = document.querySelector("moe-form");

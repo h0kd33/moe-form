@@ -73,12 +73,17 @@ Example:
         </div>
 
         <div class="layout horizontal">
-          <paper-button id="submit" raised>
-            <iron-icon icon="send"></iron-icon>送出
-          </paper-button>
-          <paper-button id="cancel" raised>
-            <iron-icon icon="cancel"></iron-icon>取消
-          </paper-button>
+          <div class="flex-11 layout">
+            <paper-button id="submit" raised>
+              <iron-icon icon="send"></iron-icon>送出
+            </paper-button>
+            <paper-button id="cancel" raised>
+              <iron-icon icon="cancel"></iron-icon>取消
+            </paper-button>
+          </div>
+          <div class="flex-1 layout">
+            <paper-icon-button icon="settings"></paper-icon-button>
+          </div>
         </div>
       </div>
     </form>
