@@ -39,9 +39,7 @@ Example:
     }
 
     input[name=file] {
-      visibility: hidden;
-      width: 1px;
-      height: 1px;
+      display: none;
     }
 
     .file-error {
@@ -56,14 +54,19 @@ Example:
       
       <div class="layout vertical">
         <div class="layout horizontal">
+          <!-- 上傳按鈕 -->
           <paper-button id="upload" raised>
             <iron-icon icon="file-upload"></iron-icon>附圖
             <input type="file" name="file" required accept="image/*" />
           </paper-button>
+
+          <!-- 檔案名稱 -->
           <template is="dom-if" if="{{file}}">
             <span>{{file.name}}</span>
             (<span>{{file.size}}</span><span>Bytes</span>)
           </template>
+
+          <!-- 檔案錯誤 -->
           <template is="dom-if" if="{{fileError}}">
             <span class="file-error">{{fileError}}</span>
           </template>
@@ -175,11 +178,6 @@ Example:
         }
       };
 
-      console.log(this.$.upload.getBoundingClientRect());
-
-      $inputFile.style.left = this.$.upload.getBoundingClientRect().left + "px";
-      $inputFile.style.top = this.$.upload.getBoundingClientRect().top + "px";
-
       this.$.upload.addEventListener("click", function() {
         $inputFile.click();
         that.fileError = null;
@@ -198,7 +196,8 @@ Example:
     },
 
     submit: function() {
-      // Trigger Native Validation
+      // 先觸發內建表單驗證
+      // 無法通過再手動驗證檔案
       if(this.$.form.submit()) {
         return true;
       } else {
@@ -206,16 +205,19 @@ Example:
       }
     },
 
+    // 觸發取消事件
     cancel: function() {
       this.fire("cancel");
     },
 
+    // 清空表單
     reset: function() {
       this.name = this.text = "";
       this.file = this.fileError = null;
       this.$.form.reset();
     },
 
+    // 驗證檔案
     validateFile: function() {
       var $inputFile = this.getInputFileElement();
       if($inputFile.required && $inputFile.files.length === 0) {
