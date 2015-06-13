@@ -51,7 +51,7 @@ Example:
             <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
             <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" value="{{text}}"></paper-textarea>
             <div class="layout vertical">
-                <paper-item>
+                <paper-item >
                     <!-- 上傳按鈕 -->
                     <paper-button mini id="upload" raised>
                         <iron-icon icon="file-upload"></iron-icon>附圖
@@ -68,7 +68,7 @@ Example:
                     </template>
                 </paper-item>
                 <div class="layout horizontal">
-                    <paper-item>
+                    <paper-item class="flex">
                         <paper-button mini id="submit" raised>
                             <iron-icon icon="send"></iron-icon>送出
                         </paper-button>
@@ -76,9 +76,7 @@ Example:
                             <iron-icon icon="cancel"></iron-icon>取消
                         </paper-button>
                     </paper-item>
-                    <paper-item class="layout end-justified flex">
-                      <paper-icon-button mini icon="settings"></paper-icon-button>
-                    </paper-item>
+                    <paper-icon-button mini icon="settings"></paper-icon-button>
                 </div>
             </div>
         </form>
