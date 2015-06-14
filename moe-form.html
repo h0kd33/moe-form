@@ -38,35 +38,53 @@ Example:
         background: var(--paper-grey-300);
     }
     
-    input[name=file] {
+    #file-input-container {
         display: none;
     }
     
     .file-error {
         color: var(--paper-red-500);
     }
+
+    img.preview {
+        max-width: 320px;
+        max-height: 320px;
+        margin: auto;
+    }
+
+    .remove-image {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
     </style>
     <template>
         <form is="iron-form" id="form" method="post" action="/" class="layout vertical">
             <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
-            <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" value="{{text}}"></paper-textarea>
+            <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" rows="3" value="{{text}}"></paper-textarea>
             <div class="layout vertical">
-                <paper-item >
+                <paper-item>
                     <!-- 上傳按鈕 -->
                     <paper-button mini id="upload" raised>
                         <iron-icon icon="file-upload"></iron-icon>附圖
-                        <input type="file" name="file" required accept="image/*" />
+                        <span id="file-input-container"></span>
                     </paper-button>
                     <!-- 檔案名稱 -->
                     <template is="dom-if" if="{{file}}">
                         <span>{{file.name}}</span> (
                         <span>{{file.size}}</span><span>Bytes</span>)
-                    </template>
+                    </template>                
                     <!-- 檔案錯誤 -->
                     <template is="dom-if" if="{{fileError}}">
                         <span class="file-error">{{fileError}}</span>
                     </template>
                 </paper-item>
+                <template is="dom-if" if="{{previewURL}}">
+                    <paper-item>
+                        <img class="preview" src$="{{previewURL}}" />
+                        <paper-icon-button icon="cancel" class="remove-image" on-click="removeFile"></paper-icon-button>
+                    </paper-item>
+                </template>
                 <div class="layout horizontal">
                     <paper-item class="flex">
                         <paper-button mini id="submit" raised>
@@ -120,6 +138,11 @@ Polymer({
             value: null,
             notify: true
         },
+        previewURL: {
+            type: String,
+            value: null,
+            reflectToAttribute: true
+        },
         debug: {
             type: Boolean,
             value: false
@@ -160,21 +183,7 @@ Polymer({
         });
 
         // Setup Input File
-
-        var $inputFile = this.getInputFileElement();
-
-        $inputFile.onchange = function() {
-            if (this.files.length === 1) {
-                that.file = this.files[0];
-            } else {
-                that.file = null;
-            }
-        };
-
-        this.$.upload.addEventListener("click", function() {
-            $inputFile.click();
-            that.fileError = null;
-        });
+        this.createFileInput();
     },
 
     detached: function() {
@@ -182,10 +191,6 @@ Polymer({
         // removed from a document.
         //
         // Use this to clean up anything you did in `attached`.
-    },
-
-    getInputFileElement: function() {
-        return document.querySelector("input[type=file]");
     },
 
     submit: function() {
@@ -206,19 +211,72 @@ Polymer({
     // 清空表單
     reset: function() {
         this.name = this.text = "";
-        this.file = this.fileError = null;
+        this.removeFile();
         this.$.form.reset();
+    },
+
+    removeFile: function() {
+        this.file = null;
+        this.setFileError(null);
+        this.setPreviewURL(null);
+        this.createFileInput();
+    },
+
+    setPreviewURL: function(url) {
+        if(this.previewURL) {
+            URL.revokeObjectURL(this.previewURL);
+        }
+        this.previewURL = url;
     },
 
     // 驗證檔案
     validateFile: function() {
-        var $inputFile = this.getInputFileElement();
-        if ($inputFile.required && $inputFile.files.length === 0) {
-            this.fileError = "File required";
+        var $inputFile = this.$inputFile;
+        if ($inputFile.required && (!this.file || $inputFile.files.length === 0)) {
+            this.setFileError("File required");
             return false;
         }
 
         return true;
+    },
+
+    createFileInput: function() {
+        var that = this;
+        var $container = this.$['file-input-container'];
+        var $template = document.createElement("template");
+        $template.innerHTML = '<input type="file" name="file" required accept="image/*" />';
+
+        if(this.$inputFile) {
+            $container.removeChild(this.$inputFile);
+        }
+
+        $container.innerHTML = "";
+        $container.appendChild(document.importNode($template.content, true));
+        this.$inputFile = this.$$("input[type=file]");
+
+        this.$inputFile.onchange = function() {
+            if (this.files.length === 1) {
+                that.file = this.files[0];
+                that.setPreviewURL(URL.createObjectURL(that.file));
+            } else {
+                that.removeFile();
+            }
+
+            that.setFileError(null);
+        };
+
+        if(this.uploadOnClick) {
+            this.$.upload.removeEventListener('click', this.uploadOnClick);
+        }
+
+        this.uploadOnClick = function() {
+            that.$inputFile.click();
+        };
+        this.$.upload.addEventListener("click", this.uploadOnClick);
+    },
+
+    setFileError: function(err) {
+        this.fileError = err;
     }
 });
 </script>
