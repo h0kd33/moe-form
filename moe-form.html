@@ -12,44 +12,53 @@
     <link rel="import" type="css" href="moe-form.css">
     <template>
         <form is="iron-form" id="form" method="post" action="/" class="layout vertical">
-            <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
-            <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" rows="3" value="{{text}}"></paper-textarea>
-            <div class="layout vertical">
+            <!-- 基本資料輸入 -->
+            <paper-item id="header">
+                <paper-input label="標題" id="title" name="title" placeholder="無標題" maxlength="50" value="{{title}}" class="flex"></paper-input>
+                <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}"></paper-input>
+                <paper-button id="cancel" on-tap='_edittingOff'>取消<iron-icon icon="clear"></iron-icon></paper-button>
+            </paper-item>
+            <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" rows="3" value="{{text}}" on-tap="_edittingOn"></paper-textarea>
+            <div id="footer" class="layout vertical">
                 <paper-item>
                     <!-- 上傳按鈕 -->
-                    <paper-button mini id="upload" raised>
+                    <paper-button mini id="upload" >
                         <iron-icon icon="file-upload"></iron-icon>附圖
                         <span id="file-input-container"></span>
                     </paper-button>
                     <!-- 檔案名稱 -->
                     <template is="dom-if" if="{{file}}">
-                        <span>{{file.name}}</span> (
-                        <span>{{file.size}}</span><span>Bytes</span>)
-                    </template>                
+                        <div id="fileInfo" class="layout horizontal flex">
+                            <span class="flex" id="fileName">{{file.name}}</span><span id="fileDetail"><span>{{file.size}}</span><span>Bytes</span></span>
+                        </div>
+                    </template>
                     <!-- 檔案錯誤 -->
                     <template is="dom-if" if="{{fileError}}">
                         <span class="file-error">{{fileError}}</span>
                     </template>
                 </paper-item>
+                <!-- 圖片預覽 -->
                 <template is="dom-if" if="{{previewURL}}">
-                    <paper-item>
+                    <div id="imagePreview">
                         <img class="preview" src$="{{previewURL}}" />
-                        <paper-icon-button icon="cancel" class="remove-image" on-click="removeFile"></paper-icon-button>
-                    </paper-item>
+                        <paper-icon-button icon="icons:close" class="remove-image" on-click="removeFile" height="10px"></paper-icon-button>
+                    </div>
                 </template>
+                <!-- 編輯按鈕 -->
                 <div class="layout horizontal">
                     <paper-item class="flex">
                         <paper-button mini id="submit" raised>
                             <iron-icon icon="send"></iron-icon>送出
-                        </paper-button>
-                        <paper-button mini id="cancel">
-                            <iron-icon icon="cancel"></iron-icon>取消
-                        </paper-button>
+                        </paper-button>                        
                     </paper-item>
-                    <paper-icon-button mini icon="settings"></paper-icon-button>
+                    <div>
+                        <!-- 其他設定 -->
+                        <paper-icon-button mini icon="settings"></paper-icon-button>
+                    </div>
                 </div>
             </div>
         </form>
+        <!-- Debug -->
         <template is="dom-if" if="{{debug}}">
             <div class="layout vertical center-center">
                 <div>
