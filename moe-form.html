@@ -131,7 +131,8 @@ Polymer({
     },
 
     observers: [
-        'textChanged(text)'
+        'textChanged(text)',
+        '_rowsChanged(rows)'
     ],
     listeners: {
         'neon-animation-finish': '_edittingToggleAnimation'
@@ -325,6 +326,13 @@ Polymer({
     _edittingOff: function() {
         this.editting = false;
     },
+    /**    
+    *   根據 this.rows 來增減預設行數
+    *   因為 paper-textarea 尚未轉移 iron-autogrows-textarea.rows 
+    */
+    _rowsChanged: function() {
+        // Set Textarea Rows
+        this.$.text.querySelector('iron-autogrow-textarea').rows = this.rows;
     }
 });
 </script>
