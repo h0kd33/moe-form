@@ -1,63 +1,15 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../moe-style/moe-style.html">
-<!--
-An element providing a solution to no problem in particular.
-
-Example:
-
-    <moe-form></moe-form>
-
-@demo
--->
 <dom-module id="moe-form">
-    <style>
-    :host {
-        display: block;
-        box-sizing: border-box;
-    }
-    
-    #submit {
-        background: var(--paper-green-500);
-        color: white;
-    }
-    
-    #upload {
-        background: var(--paper-yellow-600);
-        z-index: 10;
-    }
-    
-    #cancel {
-        background: var(--paper-grey-300);
-    }
-    
-    #file-input-container {
-        display: none;
-    }
-    
-    .file-error {
-        color: var(--paper-red-500);
-    }
-
-    img.preview {
-        max-width: 320px;
-        max-height: 320px;
-        margin: auto;
-    }
-
-    .remove-image {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    </style>
+    <link rel="import" type="css" href="moe-form.css">
     <template>
         <form is="iron-form" id="form" method="post" action="/" class="layout vertical">
             <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}" required></paper-input>
