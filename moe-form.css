@@ -1,0 +1,115 @@
+:host {
+    display: block;
+    position: relative;
+    box-sizing: border-box;
+}
+
+paper-item {
+    padding: 0px;
+}
+iron-icon {    
+    width: 1.3em;
+    height: 1.3em;
+}
+paper-button { 
+    font-size: 13px;
+}
+#header paper-input + paper-input {
+    margin-left: 10px;
+}
+
+#header #title::shadow #input {
+    font-weight: bold;
+    color: var(--font-color);
+}
+
+#submit {
+    background: var(--paper-green-500);
+    color: white;
+}
+
+#upload {
+    background: var(--paper-yellow-600);
+    z-index: 10;
+}
+
+#cancel::shadow paper-material {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* File upload */
+
+#file-input-container {
+    display: none;
+}
+#fileInfo {
+    font-size: 10px;
+}
+#fileInfo #fileName {
+    color: blue;    
+}
+#fileInfo #fileDetail::before {
+    content: '(';
+}
+
+#fileInfo #fileDetail::after {
+    content: ')';
+    
+}
+.file-error {
+    color: var(--paper-red-500);
+}
+
+
+/* image Preview */
+
+#imagePreview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-color: rgba(0, 0, 0, 0.3);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAHElEQVQYV2P4//+/FBbMgI4ZhohCbBhD81BQCAD6ay/4Sj20ZAAAAABJRU5ErkJggg==);
+}
+
+#imagePreview::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 40px 40px 0;
+    border-color: transparent #1261ff transparent transparent;
+}
+img.preview {
+    max-width: 320px;
+    max-height: 320px;
+    margin: auto;    
+}
+
+.remove-image {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    color: white;
+    z-index: 1;
+    --iron-icon-height: 18px;
+    --iron-icon-width: 18px;
+    
+
+}
+/* Textarea */
+
+#text::shadow iron-autogrow-textarea {
+    transition: background-color 0.3s ease-out;
+}
+
+:host([minimize]) #text::shadow iron-autogrow-textarea {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+paper-button[mini]::shadow paper-material {
+    padding: 6px 0;
+}
