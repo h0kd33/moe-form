@@ -18,12 +18,12 @@
                 <paper-input label="名稱" id="name" name="name" placeholder="無名" maxlength="50" value="{{name}}"></paper-input>
                 <paper-button id="cancel" on-tap='_edittingOff'>取消<iron-icon icon="clear"></iron-icon></paper-button>
             </paper-item>
-            <paper-textarea label="按這裡輸入內文..." id="text" name="text" required char-counter maxlength="1000" rows="3" value="{{text}}" on-tap="_edittingOn"></paper-textarea>
+            <paper-textarea label="按此輸入內文..." id="text" name="text" required char-counter maxlength="1000" rows="3" value="{{text}}" on-tap="_edittingOn"></paper-textarea>
             <div id="footer" class="layout vertical">
                 <paper-item>
                     <!-- 上傳按鈕 -->
                     <paper-button mini id="upload" >
-                        <iron-icon icon="file-upload"></iron-icon>附圖
+                        <iron-icon icon="file-upload"></iron-icon>附加圖檔
                         <span id="file-input-container"></span>
                     </paper-button>
                     <!-- 檔案名稱 -->

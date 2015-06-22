@@ -29,7 +29,7 @@ paper-button {
 }
 
 #upload {
-    background: var(--paper-yellow-600);
+    background: var(--paper-grey-300);
     z-index: 10;
 }
 
@@ -111,5 +111,5 @@ img.preview {
 }
 
 paper-button[mini]::shadow paper-material {
-    padding: 6px 0;
+    padding: 6px 12px;
 }
