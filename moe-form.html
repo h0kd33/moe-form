@@ -79,7 +79,9 @@ function clickHandler(event) {
 Polymer({
 
     is: 'moe-form',
-
+    behaviors: [
+        Polymer.NeonAnimationRunnerBehavior
+    ],
     properties: {
         name: {
             type: String,
@@ -131,6 +133,9 @@ Polymer({
     observers: [
         'textChanged(text)'
     ],
+    listeners: {
+        'neon-animation-finish': '_edittingToggleAnimation'
+    },
 
     textChanged: function(text) {
         console.log("textChanged", text);
@@ -252,6 +257,74 @@ Polymer({
 
     setFileError: function(err) {
         this.fileError = err;
+    },
+    /** 
+    *   ===切換編輯模式===
+    *   藉由切換 this.editting propertie 來達到轉換模式
+    *   
+    *   memo:正在嘗試加入hero-animation的樣式
+    */
+    _editting: function() {
+        this.animationConfig = {
+            'entry': [{
+                name: 'fade-in-animation',
+                node: this.$.header
+            }, {
+                name: 'transform-animation',
+                node: this.$.form,
+                transformFrom: '',
+                transformTo: 'translateY(' + this.$.header.offsetHeight + 'px)'
+            }, {
+                name: 'fade-in-animation',
+                node: this.$.footer
+            }],
+            'exit': [{
+                name: 'slide-up-animation',
+                node: this.$.header
+            }, {
+                name: 'fade-out-animation',
+                node: this.$.header
+            }, {
+                name: 'transform-animation',
+                node: this.$.form,
+                transformFrom: '',
+                transformTo: 'translateY(-' + this.$.header.offsetHeight + 'px)'
+            }, {
+                name: 'fade-out-animation',
+                node: this.$.footer
+            }]
+        };
+
+
+        if (!this.editting) {
+            // this.playAnimation('exit');
+            this.$.text.value = '';
+            this.$.header.hidden = true;
+            this.$.footer.hidden = true;
+        } else {
+            // this.playAnimation('entry');
+            this.$.header.hidden = false;
+            this.$.footer.hidden = false;
+        }
+    },
+    _edittingToggleAnimation: function() {
+        var textarea = this.$.text;
+        var header = this.$.header;
+        var footer = this.$.footer;
+        var moveY = header.offsetHeight;
+
+        if (!this.editting) {
+            // header.hidden = true;
+        } else {
+
+        }
+    },
+    _edittingOn: function() {
+        this.editting = true;
+    },
+    _edittingOff: function() {
+        this.editting = false;
+    },
     }
 });
 </script>
