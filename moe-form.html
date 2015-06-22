@@ -165,6 +165,7 @@ Polymer({
 
         // Setup Input File
         this.createFileInput();
+
     },
 
     detached: function() {
@@ -204,7 +205,7 @@ Polymer({
     },
 
     setPreviewURL: function(url) {
-        if(this.previewURL) {
+        if (this.previewURL) {
             URL.revokeObjectURL(this.previewURL);
         }
         this.previewURL = url;
@@ -227,7 +228,7 @@ Polymer({
         var $template = document.createElement("template");
         $template.innerHTML = '<input type="file" name="file" required accept="image/*" />';
 
-        if(this.$inputFile) {
+        if (this.$inputFile) {
             $container.removeChild(this.$inputFile);
         }
 
@@ -246,7 +247,7 @@ Polymer({
             that.setFileError(null);
         };
 
-        if(this.uploadOnClick) {
+        if (this.uploadOnClick) {
             this.$.upload.removeEventListener('click', this.uploadOnClick);
         }
 
