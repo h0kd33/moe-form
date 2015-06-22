@@ -111,6 +111,20 @@ Polymer({
         debugOutput: {
             type: String,
             notify: true
+        },
+        // 編輯模式 (關閉後隱藏paper-textarea以外的elements)
+        editting: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_editting',
+            notify: true
+        },
+        // 預設行數
+        rows: {
+            type: Number,
+            value: 3,
+            reflectToAttribute: true
         }
     },
 
